@@ -1,0 +1,17 @@
+# Dependencies
+backend/node_modules/
+frontend/node_modules/
+
+# Environment
+backend/.env
+frontend/.env
+backend/.npmrc
+
+# Build output
+frontend/dist/
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
