@@ -13,7 +13,7 @@ const BuyerDashboard = () => {
     const fetchReports = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-        const { data } = await axios.get('http://localhost:5000/api/reports/myreports', config);
+        const { data } = await axios.get('/api/reports/myreports', config);
         setReports(data);
       } catch (error) {
         toast.error('Failed to load reports');

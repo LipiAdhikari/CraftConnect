@@ -41,7 +41,7 @@ const ProductDetail = () => {
 
   const fetchProduct = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
+      const { data } = await axios.get(`/api/products/${id}`);
       setProduct(data);
     } catch (error) {
       console.error(error);
@@ -76,7 +76,7 @@ const ProductDetail = () => {
 
     try {
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-      const { data } = await axios.post('http://localhost:5000/api/upload/public', formData, config);
+      const { data } = await axios.post('/api/upload/public', formData, config);
       setEvidenceImages([...evidenceImages, data.imageUrl]);
       toast.success('Image uploaded');
     } catch (error) {
@@ -101,7 +101,7 @@ const ProductDetail = () => {
     try {
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
       await axios.post(
-        'http://localhost:5000/api/reports',
+        '/api/reports',
         {
           productId: product._id,
           reason: reportReason,

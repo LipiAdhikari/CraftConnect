@@ -12,8 +12,8 @@ const ProductList = () => {
   const fetchProducts = async () => {
     try {
       const url = keyword 
-        ? `http://localhost:5000/api/products?keyword=${keyword}`
-        : 'http://localhost:5000/api/products';
+        ? `/api/products?keyword=${keyword}`
+        : '/api/products';
       const { data } = await axios.get(url);
       setProducts(data);
     } catch (error) {
@@ -30,7 +30,7 @@ const ProductList = () => {
       try {
         const userInfo = JSON.parse(localStorage.getItem('userInfo'));
         const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-        await axios.delete(`http://localhost:5000/api/products/${id}`, config);
+        await axios.delete(`/api/products/${id}`, config);
         toast.success('Product deleted');
         fetchProducts();
       } catch (error) {
@@ -43,7 +43,7 @@ const ProductList = () => {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      const { data } = await axios.post('http://localhost:5000/api/products', {}, config);
+      const { data } = await axios.post('/api/products', {}, config);
       navigate(`/admin/products/${data._id}/edit`);
     } catch (error) {
       toast.error('Failed to create product');

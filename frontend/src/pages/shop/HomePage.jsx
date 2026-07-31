@@ -13,7 +13,7 @@ const HomePage = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get('http://localhost:5000/api/products');
+        const { data } = await axios.get('/api/products');
         setProducts(data.slice(0, 4)); // Only show 4 featured products on homepage
       } catch (error) {
         console.error('Error fetching products', error);

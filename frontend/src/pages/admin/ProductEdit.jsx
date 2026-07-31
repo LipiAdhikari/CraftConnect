@@ -28,7 +28,7 @@ const ProductEdit = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/products/${productId}`);
+        const { data } = await axios.get(`/api/products/${productId}`);
         setName(data.name);
         setPrice(data.price);
         setImageUrl(data.imageUrl);
@@ -63,7 +63,7 @@ const ProductEdit = () => {
         },
       };
 
-      const { data } = await axios.post('http://localhost:5000/api/upload', formData, config);
+      const { data } = await axios.post('/api/upload', formData, config);
       setImageUrl(data.imageUrl);
       toast.success('Image uploaded successfully');
     } catch (error) {
@@ -79,7 +79,7 @@ const ProductEdit = () => {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
       
-      await axios.put(`http://localhost:5000/api/products/${productId}`, {
+      await axios.put(`/api/products/${productId}`, {
         name,
         price,
         imageUrl,

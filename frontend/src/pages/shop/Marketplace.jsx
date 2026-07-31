@@ -25,7 +25,7 @@ const Marketplace = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const url = `http://localhost:5000/api/products${keyword ? `?keyword=${keyword}` : ''}${category ? (keyword ? `&category=${category}` : `?category=${category}`) : ''}`;
+      const url = `/api/products${keyword ? `?keyword=${keyword}` : ''}${category ? (keyword ? `&category=${category}` : `?category=${category}`) : ''}`;
       const { data } = await axios.get(url);
       
       let sortedData = [...data];

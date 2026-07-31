@@ -31,7 +31,7 @@ const RegisterBuyer = () => {
     try {
       const config = { headers: { 'Content-Type': 'application/json' } };
       const { data } = await axios.post(
-        'http://localhost:5000/api/users',
+        '/api/users',
         { name, email, password, role: 'buyer', phone },
         config
       );

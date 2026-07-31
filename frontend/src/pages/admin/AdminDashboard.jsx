@@ -22,7 +22,7 @@ const AdminDashboard = () => {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      const { data } = await axios.get('http://localhost:5000/api/users/artisans/pending', config);
+      const { data } = await axios.get('/api/users/artisans/pending', config);
       setPendingArtisans(data);
     } catch (error) {
       toast.error('Failed to load pending verifications');
@@ -35,7 +35,7 @@ const AdminDashboard = () => {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      await axios.put(`http://localhost:5000/api/users/${id}/verify`, { status }, config);
+      await axios.put(`/api/users/${id}/verify`, { status }, config);
       toast.success(`Artisan ${status === 'verified' ? 'Approved' : 'Rejected'} successfully`);
       fetchPendingArtisans();
     } catch (error) {
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      const { data } = await axios.get('http://localhost:5000/api/reports', config);
+      const { data } = await axios.get('/api/reports', config);
       setReports(data);
     } catch (error) {
       toast.error('Failed to load reports');
@@ -60,7 +60,7 @@ const AdminDashboard = () => {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      await axios.put(`http://localhost:5000/api/reports/${reportId}`, { status, hideProduct }, config);
+      await axios.put(`/api/reports/${reportId}`, { status, hideProduct }, config);
       toast.success(`Report marked as ${status}`);
       fetchReports();
     } catch (error) {

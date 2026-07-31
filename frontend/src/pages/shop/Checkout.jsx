@@ -61,7 +61,7 @@ const Checkout = () => {
 
       // 1. Create the Order
       const { data } = await axios.post(
-        'http://localhost:5000/api/orders',
+        '/api/orders',
         {
           orderItems: cartItems.map(item => ({
             product: item.product,
@@ -84,7 +84,7 @@ const Checkout = () => {
         navigate(`/payment/success/${data._id}`);
       } else {
         // Automatically mock successful payment for eSewa / Khalti
-        await axios.put(`http://localhost:5000/api/orders/${data._id}/pay`, { transactionId: `MOCK_${paymentMethod.toUpperCase()}_${Date.now()}` }, config);
+        await axios.put(`/api/orders/${data._id}/pay`, { transactionId: `MOCK_${paymentMethod.toUpperCase()}_${Date.now()}` }, config);
         clearCart();
         toast.success(`Successful payment with ${paymentMethod}! Your order has been placed successfully.`);
         navigate(`/payment/success/${data._id}`);

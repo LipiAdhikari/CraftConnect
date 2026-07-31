@@ -30,7 +30,7 @@ const RegisterArtisan = () => {
 
     try {
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-      const { data } = await axios.post('http://localhost:5000/api/upload/public', formDataUpload, config);
+      const { data } = await axios.post('/api/upload/public', formDataUpload, config);
       
       if (isArray) {
         setFormData(prev => ({ ...prev, [field]: [...prev[field], data.imageUrl] }));
@@ -56,7 +56,7 @@ const RegisterArtisan = () => {
     try {
       const config = { headers: { 'Content-Type': 'application/json' } };
       await axios.post(
-        'http://localhost:5000/api/users',
+        '/api/users',
         { ...formData, role: 'artisan' },
         config
       );
