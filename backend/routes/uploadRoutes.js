@@ -1,70 +1,55 @@
-import express from "express";
-import multer from "multer";
-import path from "path";
+import express from 'express';
+import multer from 'multer';
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { protect, verifiedArtisan } from '../middleware/authMiddleware.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, "uploads/"); // Save files to backend/uploads directory
-  },
-  filename(req, file, cb) {
-    cb(
-      null,
-      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`,
-    );
+// Configure Cloudinary with credentials from .env
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Configure multer to use Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    return {
+      folder: 'craftconnect_uploads',
+      resource_type: 'auto', // This allows both images and videos
+      allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'mp4', 'mov', 'avi', 'mkv', 'webm'],
+    };
   },
 });
 
-function checkFileType(file, cb) {
-  const filetypes = /jpg|jpeg|png|webp|mp4|mov|avi|mkv|webm/;
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = filetypes.test(file.mimetype);
+const upload = multer({ storage });
 
-  if (extname && mimetype) {
-    return cb(null, true);
-  } else {
-    cb('Images and Videos only!');
-  }
-}
-
-import { protect, verifiedArtisan } from "../middleware/authMiddleware.js";
-
-const upload = multer({
-  storage,
-  fileFilter: function (req, file, cb) {
-    checkFileType(file, cb);
-  },
-});
-
-router.post("/public", upload.single("image"), (req, res) => {
+// Public upload route (e.g., for buyer/artisan registration)
+router.post('/public', upload.single('image'), (req, res) => {
   if (!req.file) {
-    return res.status(400).send("No image provided");
+    return res.status(400).send('No file provided');
   }
-  const protocol = req.protocol;
-  const host = req.get("host");
   res.send({
-    message: "Image Uploaded Successfully",
-    imageUrl: `${protocol}://${host}/${req.file.path.replace(/\\/g, "/")}`,
+    message: 'File Uploaded Successfully to Cloudinary',
+    imageUrl: req.file.path, // Cloudinary provides the secure URL in req.file.path
   });
 });
 
-router.post(
-  "/",
-  protect,
-  verifiedArtisan,
-  upload.single("image"),
-  (req, res) => {
-    if (!req.file) {
-      return res.status(400).send("No image provided");
-    }
-    const protocol = req.protocol;
-    const host = req.get("host");
-    res.send({
-      message: "Image Uploaded Successfully",
-      imageUrl: `${protocol}://${host}/${req.file.path.replace(/\\/g, "/")}`,
-    });
-  },
-);
+// Protected upload route (e.g., for creating products)
+router.post('/', protect, verifiedArtisan, upload.single('image'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file provided');
+  }
+  res.send({
+    message: 'File Uploaded Successfully to Cloudinary',
+    imageUrl: req.file.path,
+  });
+});
 
 export default router;
